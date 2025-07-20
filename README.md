@@ -3,19 +3,17 @@ This repository includes the implementations of Ledger databases, which are used
 
 ## Code Structure
 ```
-├── data/
-├── results/
-├── builds/
-├── doc/
-├── exps/
-    ├── scripts/
+├── data/       directory resevered for storing data
+├── results/    directory resevered for storing experiment results
+├── builds/     directory resevered for storing builded executables
+├── logs/       directory resevered for storing logs
+├── doc/        the paper
 ├── src/
-    ├── LDB/    source code of LedgerDB, SQL Ledger, and QLDB, a fork of [LedgerDatabase](https://github.com/nusdbsystem/LedgerDatabase).
-    ├── QMDB/  source code of QMDB, a fork of [QMDB]().
-    ├── LETUS/  source code of LETUS , reimplemented by ours.
+    ├── LDB/    source code of LedgerDB, SQL Ledger, and QLDB, a fork of "[LedgerDatabase](https://github.com/nusdbsystem/LedgerDatabase)".
+    ├── QMDB/  source code of QMDB, a fork of [QMDB](https://github.com/LayerZero-Labs/qmdb).
+    ├── LETUS/  source code of LETUS, reimplemented by us.
     ├── ViDB/  source code of ViDB,
     └── tools/
-├── test/
 ├── .gitignore
 ├── README.md
 ├── LICENSE
@@ -32,11 +30,12 @@ This repository includes the implementations of Ledger databases, which are used
 * cmake (&geq; 3.12.2)
 * gcc (&geq; 5.5)
 
-## Setup
-
-
-## Run experiments
-
+## Setup and Run experiments
+The instructions to setup and run experiments are in the folder of each ledger databases.
+- To run ViDB, please see [ViDB run experiment](ViDB/README.md).
+- To run LedgerDB, SQL Ledger, and QLDB, please see [LDB run experiment](LDB/README.md).
+- To run QMDB, please see [QMDB run experiment](QMDB/README.md).
+- To run LETUS, please see [LETUS run experiment](LETUS/README.md).
 
 ### Example results
 Experiment setting

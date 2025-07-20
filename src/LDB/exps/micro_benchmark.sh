@@ -40,7 +40,7 @@ for n_acc in "${load_account[@]}"; do
 
             # get file sizes
             if [ ! -d "$data_path" ]; then
-                echo "数据文件夹 $data_path 不存在。"
+                echo "$data_path do not exist."
                 exit 1
             fi
             folder_size=$(du -sk "$data_path" | cut -f1)

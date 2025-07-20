@@ -8,3 +8,6 @@ logs/*
 !results/.gitkeep
 !builds/.gitkeep
 !logs/.gitkeep
+
+
+*.dat
