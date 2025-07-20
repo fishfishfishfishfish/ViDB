@@ -1,0 +1,9 @@
+data/
+results/
+builds/
+logs/
+
+!data/.gitkeep
+!results/.gitkeep
+!builds/.gitkeep
+!logs/.gitkeep
