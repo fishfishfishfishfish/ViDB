@@ -14,6 +14,7 @@ if __name__ == "__main__":
     summary_file = f'{args.result_path}/{args.test_name}_summary.csv'    
     
     summary_dict = {"entry_count":[], "value_size":[], "version_count":[], "latency":[], "throughput":[]}
+    detail_files = []
     for entry in os.listdir(result_path):
         full_path = os.path.join(result_path, entry)
         if os.path.isfile(full_path) and entry.endswith('.csv'):
