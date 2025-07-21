@@ -19,7 +19,7 @@ if __name__ == "__main__":
     latency_plot_file = f'{args.result_path}/{args.test_name}_latency.pdf'
     disk_plot_file = f'{args.result_path}/{args.test_name}_disk.pdf'
     
-    summary_dict = {"entry_count":[], "verios_count":[], "value_size":[], 
+    summary_dict = {"entry_count":[], "version_count":[], "value_size":[], 
                     "throughput":[], "latency":[], "disk":[]}
     detail_files = []
     for entry in os.listdir(detail_dir):
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     for i, (acc, bz, vl, fn, fp) in enumerate(detail_files):
         df = pd.read_csv(fp)
         summary_dict["entry_count"].append(acc)
-        summary_dict["verios_count"].append(bz)
+        summary_dict["version_count"].append(bz)
         summary_dict["value_size"].append(vl)
         summary_dict["throughput"].append(np.mean(df['throughput'].to_numpy()))
         summary_dict["latency"].append(np.mean(df['latency'].to_numpy()))

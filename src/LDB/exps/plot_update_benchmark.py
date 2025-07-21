@@ -19,6 +19,8 @@ if __name__ == "__main__":
     latency_plot_file = f'{args.result_path}/{args.test_name}_latency.pdf'
     disk_plot_file = f'{args.result_path}/{args.test_name}_disk.pdf'
     
+    summary_dict = {"entry_count":[], "version_count":[], "value_size":[], 
+            "throughput":[], "latency":[], "disk":[]}
     detail_files = []
     for entry in os.listdir(result_path):
         full_path = os.path.join(result_path, entry)
@@ -32,6 +34,17 @@ if __name__ == "__main__":
     
     plt.figure(figsize=(6, 2))
     detail_files = sorted(detail_files)
+    for i, (acc, bz, vl, fn, fp) in enumerate(detail_files):
+        df = pd.read_csv(fp)
+        summary_dict["entry_count"].append(acc)
+        summary_dict["version_count"].append(bz)
+        summary_dict["value_size"].append(vl)
+        summary_dict["throughput"].append(np.mean(df['throughput'].to_numpy()))
+        summary_dict["latency"].append(np.mean(df['latency'].to_numpy()))
+        summary_dict["disk"].append(df.iloc[-1]['size'])
+    summary_df =  pd.DataFrame(summary_dict)
+    summary_df.to_csv(summary_file, index=False)
+    
     for i, (acc, bz, vl, fn, fp) in enumerate(detail_files):
         df = pd.read_csv(fp)
         plt.plot(df['version'], df['latency'], label=f'data volume={acc}', color=color_map[i])

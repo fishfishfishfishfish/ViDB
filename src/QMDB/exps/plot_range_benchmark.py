@@ -6,13 +6,13 @@ import pandas as pd
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process some CSV files.')
-    parser.add_argument('db_name', type=str, help='The name of the tested db')
+    parser.add_argument('result_path', type=str, help='The path of experiment result traces')
     parser.add_argument('test_name', type=str, help='The name of the test')
     args = parser.parse_args()
 
-    detail_dir = f'results_{args.db_name}/{args.test_name}'
-    summary_file = f'results_{args.db_name}/{args.test_name}_summary.csv'
-    summary_plot_file = f'results_{args.db_name}/{args.test_name}_summary.png'
+    detail_dir = f'{args.result_path}/{args.test_name}'
+    summary_file = f'{args.result_path}/{args.test_name}_summary.csv'
+    summary_plot_file = f'{args.result_path}/{args.test_name}_summary.png'
     
     summary_dict = {"entry_count":[], "value_size":[], "range_size": [], 
                   "latency":[], "throughput":[]}

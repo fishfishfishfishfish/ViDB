@@ -6,14 +6,13 @@ import pandas as pd
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process some CSV files.')
-    parser.add_argument('db_name', type=str, help='The name of the tested db')
+    parser.add_argument('result_path', type=str, help='The path of experiment result traces')
     parser.add_argument('test_name', type=str, help='The name of the test')
     args = parser.parse_args()
 
-    detail_dir = f'results_{args.db_name}/{args.test_name}'
-    summary_file = f'results_{args.db_name}/{args.test_name}_summary.csv'
-    range_file = f'results_{args.db_name}/{args.test_name}_range.csv'
-    summary_plot_file = f'results_{args.db_name}/{args.test_name}_summary.png'
+    detail_dir = f'{args.result_path}/{args.test_name}'
+    summary_file = f'{args.result_path}/{args.test_name}_summary.csv'
+    summary_plot_file = f'{args.result_path}/{args.test_name}_summary.png'
     
     
     summary_dict = {"entry_count":[], "batch_size":[], "value_size":[], 
@@ -48,16 +47,6 @@ if __name__ == "__main__":
         summary_dict["load_throughput"].append(np.mean(load_df['throughput'].to_numpy()))
         summary_dict["get_throughput"].append(np.mean(get_df['throughput'].to_numpy()))
         summary_dict["put_throughput"].append(np.mean(put_df['throughput'].to_numpy()))
-        
-        # ranges = df[df['operation'].str.startswith('RANGE')]['operation'].unique()
-        # for r in ranges:
-        #     data = df[df['operation'] == r]
-        #     range_dict["entry_count"].append(acc)
-        #     range_dict["batch_size"].append(bz)
-        #     range_dict["value_size"].append(vl)
-        #     range_dict["range_size"].append(int(r.strip('RANGE')))
-        #     range_dict["throughput"].append(np.mean(data['throughput'].to_numpy()))
-        #     range_dict["latency"].append(np.mean(data['latency'].to_numpy()))
         
     summary_df =  pd.DataFrame(summary_dict)
     summary_df.to_csv(summary_file, index=False)
