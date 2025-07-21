@@ -2,7 +2,8 @@
 source env.sh
 
 db_name=$1
-echo "db_name: $db_name"
+test_name=$2
+echo "db_name: $db_name, test_name=$test_name"
 
 # define experiment parameters
 load_account=(500 1000 2000 3000 4000 5000)
@@ -12,7 +13,7 @@ update_count=100
 
 # init dirs
 data_path="${datadir}"
-result_path="${resdir}/results_${db_name}/update_benchmark${test_name}"
+result_path="${resdir}/results_${db_name}/update_benchmark_${test_name}"
 echo "data_path: $data_path"
 echo "result_path: $result_path"
 

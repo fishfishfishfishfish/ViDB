@@ -11,8 +11,8 @@ This repository includes the implementations of Ledger databases, which are used
 ├── src/<br>
 &emsp;&emsp;├── LDB/&emsp;&emsp;&emsp;&nbsp;*source code of LedgerDB, SQL Ledger, and QLDB, a fork of [LedgerDatabase](https://github.com/nusdbsystem/LedgerDatabase)*<br>
 &emsp;&emsp;├── QMDB/&emsp;&emsp;*source code of QMDB, a fork of [QMDB](https://github.com/LayerZero-Labs/qmdb)*<br>
-&emsp;&emsp;├── LETUS/&emsp;&emsp;&nbsp;*source code of LETUS, reimplemented by us.*<br>
-&emsp;&emsp;├── ViDB/&emsp;&emsp;&emsp;*source code of ViDB,*<br>
+&emsp;&emsp;├── LETUS/&emsp;&emsp;&nbsp;*source code of LETUS, reimplemented by us*<br>
+&emsp;&emsp;├── ViDB/&emsp;&emsp;&emsp;*source code of ViDB, proposed in our work*<br>
 &emsp;&emsp;└── tools/ <br>
 ├── .gitignore<br>
 ├── README.md<br>
@@ -34,6 +34,7 @@ This repository includes the implementations of Ledger databases, which are used
 * gcc (&geq; 5.5)
 * make (&geq; 4.3)
 * unzip (6.00 of 20)
+* python (&geq; 3.8.10)
 * linux-libc-dev
 * libclang-dev
 * libjemalloc-dev
