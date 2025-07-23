@@ -58,22 +58,3 @@ The following commands start the evaluation:
 ```
 The results will be stored in `${respository_root}/results/results_vidb/tier_benchamrk_{timestamp}/coldHot_{#rec}_{cold_ratio}_summary.csv`.
 Each `.log` file is created for a specific number of data records (`{#rec}`) and the ratio of cold data (`{cold_ratio}`), containing query latency under the corresponiding condition.
-
-## Blockchain workloads
-1. deploy and run a hyperchain node first.
-2. configure the following files according the hyperchain node.
-    - `hyperbench3/benchmark/hyperchain/global/hpc.toml`
-    - `hyperbench3/benchmark/hyperchain/transfer_pure/testplan.toml`
-    - `hyperbench3/benchmark/hyperchain/transfer_evm/testplan.toml`
-
-3. run experiments.
-    - For the simple payment worklord, please run the following commands.
-        ```bash
-        ./run_chain_payment.sh
-        ```
-        The results will be stored in `${respository_root}/results/results_vidb/chain_simple/`.
-    - For the evm transfer workload, please run the following commands.
-        ```
-        ./run_chain_evm.sh
-        ```
-        The results will be stored in `${respository_root}/results/results_vidb/chain_evm/`.
