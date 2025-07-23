@@ -1,47 +1,48 @@
-# build
-To build the QMDB for experiments, please enter the `exps` directory and run the build script:
+# QMDB
+This README provides comprehensive instructions on building and running experiments for QMDB, which is proposed in the paper "QMDB: Quick Merkle Database". The code is forked from https://github.com/LayerZero-Labs/qmdb.
+
+## Build
+To build the QMDB, please navigate to the `exps` directory and run the build script:
 ```bash
 cd exps
 ./build.sh
 ```
-The script will build QMDB, and place the binaries in the `${respository_root}/builds/build_release_qmdb/bin` directory.
+The script will build QMDB.
+The resulting binaries are in: `${respository_root}/builds/build_release_qmdb/bin`.
 
-# run experiments
-To run the experiments, you will need to have the QMDB binaries built as described above. 
-Here we detail how to run the experiments to evaluate QMDB.
+### Experiments
+Each experiment will generate results in a CSV file. 
+> ℹ️ We use the `{timestamp}` placeholder to represent the start time of each experiment.
 
-## Point query and updates
-You can start the evaluation using the following commands.
+### Point query and updates
+The following commands start the evaluation:
 ```bash
 cd exps
 ./run_micro_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_qmdb/micro_benchamrk_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_qmdb/micro_benchamrk_{timestamp}_summary.csv`.
 
-## Range query
-You can start the evaluation using the following commands.
+
+### Range query
+The following commands start the evaluation:
 ```bash
 cd exps
 ./run_range_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_qmdb/range_benchamrk_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_qmdb/range_benchamrk_{timestamp}_summary.csv`.
 
-## Historical version query
-You can start the evaluation using the following commands.
+### Historical version query
+The following commands start the evaluation:
 ```bash
 cd exps
 ./run_lineage_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_qmdb/lineage_benchamrk_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_qmdb/lineage_benchamrk_{timestamp}_summary.csv`.
 
 ## Version pruning
-You can start the evaluation using the following commands.
+The following commands start the evaluation:
 ```bash
 cd exps
 ./run_update_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_qmdb/update_benchmark_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_qmdb/update_benchmark_{timestamp}_summary.csv`.

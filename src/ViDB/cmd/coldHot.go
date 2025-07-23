@@ -90,5 +90,5 @@ func executeColdHot(cmd *cobra.Command, args []string) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(fmt.Sprintf("Cold data ratio: %.2f, cold query latency: %d ns, hot query latency: %d ns", coldRate, coldDurtion.Nanoseconds(), hotDurtion.Nanoseconds()))
+	fmt.Println(fmt.Sprintf("Cold data ratio: %.2f, cold query latency: %f s, hot query latency: %f s", coldRate, float64(coldDurtion.Milliseconds())/float64(minCount)*1e-3, float64(hotDurtion.Milliseconds())/float64(minCount)*1e-3))
 }

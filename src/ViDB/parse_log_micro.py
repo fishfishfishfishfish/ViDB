@@ -99,23 +99,27 @@ if __name__ == "__main__":
     # list all files
     log_files = os.listdir(benchmark_log_dir)
     log_files = [os.path.join(benchmark_log_dir, log_file) for log_file in log_files if log_file.endswith('.log')]
-    micro_result_dict = {"entry_count": [], "batch_size": [], "value_size": [], "read_latency": [], "write_latency": [], "timpestamp": []}
+    micro_result_dict = {"entry_count": [], "batch_size": [], "value_size": [], "get_latency": [], "put_latency": [], "get_throughput": [], "put_throughput": [], "timpestamp": []}
     for log_file in log_files:
         type, entry_count, batch_size, value_size, timestamp, latency = parse_log(log_file)
         if type == "micro":
             micro_result_dict["entry_count"].append(entry_count)
             micro_result_dict["batch_size"].append(batch_size)
             micro_result_dict["value_size"].append(value_size)
-            micro_result_dict["read_latency"].append(latency[0])
-            micro_result_dict["write_latency"].append(latency[1])
+            micro_result_dict["get_latency"].append(latency[0]*1e-9)
+            micro_result_dict["put_latency"].append(latency[1]*1e-9)
+            micro_result_dict["get_throughput"].append(batch_size/(latency[0]*1e-9))
+            micro_result_dict["put_throughput"].append(batch_size/(latency[1]*1e-9))
             micro_result_dict["timpestamp"].append(timestamp)
     micro_result_df = pd.DataFrame(micro_result_dict)
+    micro_result_df.sort_values(by=['entry_count', 'batch_size', 'value_size'], ascending=[True,True,True], inplace=True, na_position='last')    
+
     print(micro_result_df)
     micro_result_df.to_csv(summary_file, index=False)
     
     plt.figure(figsize=(4, 3))
-    plt.plot(micro_result_df["batch_size"], micro_result_df["read_latency"], label="no restart")
-    plt.ylabel("latency (ns)")
+    plt.plot(micro_result_df["batch_size"], micro_result_df["get_latency"], label="no restart")
+    plt.ylabel("latency (s)")
     plt.xlabel("value size")
     plt.title("Read latency")
     plt.legend()

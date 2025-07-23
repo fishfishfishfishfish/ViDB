@@ -1,61 +1,79 @@
-# build
-To build the ViDB for experiments, please enter the `exps` directory and run the build script:
+# ViDB
+This README provides comprehensive instructions on building and running experiments for ViDB, which is proposed in our paper "[ViDB: Cost-Efficient Ledger Database At Scale](doc/)". 
+
+## build
+To build the ViDB, please run the build script:
 ```bash
 ./build.sh
 ```
-The script will build ViDB, and place the binaries in the `${respository_root}/builds/build_release_vidb/bin` directory.
+The script will build ViDB.
+The resulting binaries are in: `${respository_root}/builds/build_release_vidb/bin`.
 
 # run experiments
-To run the experiments, you will need to have the ViDB binaries built as described above. 
-Here we detail how to run the experiments to evaluate ViDB.
+Each experiment will generate results in a CSV file or log file. 
+> ℹ️ We use the `{timestamp}` placeholder to represent the start time of each experiment.
 
 ## Point query and updates
-You can start the evaluation using the following command.
+The following commands start the evaluation:
 ```bash
 ./run_micro_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_vidb/micro_benchamrk_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in`${respository_root}/results/results_vidb/micro_benchamrk_{timestamp}_summary.csv`.
+
 
 ## Range query
-You can start the evaluation using the following command.
+The following commands start the evaluation:
 ```bash
 ./run_range_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_vidb/range_benchamrk_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_vidb/range_benchamrk_{timestamp}_summary.csv`.
 
 ## Historical version query
-You can start the evaluation using the following command.
+The following commands start the evaluation:
 ```bash
 ./run_lineage_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_vidb/lineage_benchamrk_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_vidb/lineage_benchamrk_{timestamp}_summary.csv`.
 
 ## Version pruning
-You can start the evaluation using the following command.
+The following commands start the evaluation:
 ```bash
 ./run_update_benchmark.sh 
 ```
-This will run experiments, and place the results in `${respository_root}/results/results_qmdb/update_benchmark_{timestamp}/updataMeta_{#rec}_{timestamp}.log`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_qmdb/update_benchmark_{timestamp}/updataMeta_{#rec}_{timestamp}.log`.
 Each `.log` file is created for a specific number of data records (`{#rec}`), containing update latency, index disk usage, total disk usage for each version.
 
 ## Version rollback
-You can start the evaluation using the following command.
+The following commands start the evaluation:
 ```bash
 ./run_rollback_benchmark.sh 
 ```
-This will run experiments, and place the results in `${respository_root}/results/results_qmdb/rollback_benchmark_{timestamp}/rollback_{#rec}_{timestamp}.log`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_qmdb/rollback_benchmark_{timestamp}/rollback_{#rec}_{timestamp}.log`.
 Each `.log` file is created for a specific number of data records (`{#rec}`), containing rollback latency each number of rollback version.
 
 ## Storage tiering
-You can start the evaluation using the following command.
+The following commands start the evaluation:
 ```bash
 ./run_tier_benchmark.sh
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_vidb/tier_benchamrk_{timestamp}/coldHot_{#rec}_{cold_ratio}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_vidb/tier_benchamrk_{timestamp}/coldHot_{#rec}_{cold_ratio}_summary.csv`.
 Each `.log` file is created for a specific number of data records (`{#rec}`) and the ratio of cold data (`{cold_ratio}`), containing query latency under the corresponiding condition.
+
+## Blockchain workloads
+1. deploy and run a hyperchain node first.
+2. configure the following files according the hyperchain node.
+    - `hyperbench3/benchmark/hyperchain/global/hpc.toml`
+    - `hyperbench3/benchmark/hyperchain/transfer_pure/testplan.toml`
+    - `hyperbench3/benchmark/hyperchain/transfer_evm/testplan.toml`
+
+3. run experiments.
+    - For the simple payment worklord, please run the following commands.
+        ```bash
+        ./run_chain_payment.sh
+        ```
+        The results will be stored in `${respository_root}/results/results_vidb/chain_simple/`.
+    - For the evm transfer workload, please run the following commands.
+        ```
+        ./run_chain_evm.sh
+        ```
+        The results will be stored in `${respository_root}/results/results_vidb/chain_evm/`.

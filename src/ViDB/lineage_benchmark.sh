@@ -8,8 +8,8 @@ echo "db_name: $db_name, test_name=$test_name"
 operationCounts=("1M" "10M") # Human-readable operation counts
 valueSizes=(1024)
 batchSizes=(25000)             
-queryVersionsStart="1,2,4,10,20,40"
-queryVersionsCount="1,10"
+queryVersionsStart="10,20,40"
+queryVersionsCount="1"
 keySize=32
 
 

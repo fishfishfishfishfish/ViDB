@@ -192,13 +192,7 @@ int main(int argc, char** argv) {
     cur_version = reply.values(0).estimate_block();
 #endif
 #ifdef AMZQLDB
-    cur_version = reply.qproof(0).blockno();
-#ifdef DEBUG
-    std::cout << "blockno: " << reply.qproof(0).blockno()    // 区块号
-              << ", doc_seq: " << reply.qproof(0).doc_seq()  // 文档编号
-              << ", version: " << reply.qproof(0).version()  // kv的版本号
-              << std::endl;
-#endif
+    cur_version = version;
 #endif
     std::cout << "version " << version << "/" << cur_version
               << ", put latnecy:" << put_latency << ","
@@ -234,13 +228,7 @@ int main(int argc, char** argv) {
     cur_version = reply.values(0).estimate_block();
 #endif
 #ifdef AMZQLDB
-    cur_version = reply.qproof(0).blockno();
-#ifdef DEBUG
-    std::cout << "blockno: " << reply.qproof(0).blockno()    // 区块号
-              << ", doc_seq: " << reply.qproof(0).doc_seq()  // 文档编号
-              << ", version: " << reply.qproof(0).version()  // kv的版本号
-              << std::endl;
-#endif
+    cur_version = version;
 #endif
     if (version % 1 == 0) {
       std::cout << "version " << version << "/" << cur_version

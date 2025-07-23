@@ -1,47 +1,47 @@
-# build
-To build the LETUS for experiments, please enter the `exps` directory and run the build script:
+# LETUS
+This README provides comprehensive instructions on building and running experiments for LETUS, which is proposed in the paper "LETUS: A Log-Structured Efficient Trusted Universal BlockChain Storage". We implement LETUS by ourselves based on the detailed description in the paper.
+
+## Build
+To build the LETUS, please navigate to the `exps` directory and run the build script:
 ```bash
 cd exps
 ./build.sh --cxx g++ --build-type release
 ```
-The script will build LETUS, and place the binaries in the `${respository_root}/builds/build_release_letus/bin` directory.
+The script will build LETUS, 
+The resulting binaries are in: `${respository_root}/builds/build_release_letus/bin`.
 
-# run experiments
-To run the experiments, you will need to have the LETUS binaries built as described above. 
-Here we detail how to run the experiments to evaluate LETUS.
+## Experiments
+Each experiment will generate results in a CSV file. 
+> ℹ️ We use the `{timestamp}` placeholder to represent the start time of each experiment.
 
-## Point query and updates
-You can start the evaluation using the following commands.
+### Point query and updates
+The following commands start the evaluation:
 ```bash
 cd exps
 ./run_micro_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_letus/micro_benchamrk_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_letus/micro_benchamrk_{timestamp}_summary.csv`.
 
-## Range query
-You can start the evaluation using the following commands.
+### Range query
+The following commands start the evaluation:
 ```bash
 cd exps
 ./run_range_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_letus/range_benchamrk_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_letus/range_benchamrk_{timestamp}_summary.csv`.
 
-## Historical version query
-You can start the evaluation using the following commands.
+### Historical version query
+The following commands start the evaluation:
 ```bash
 cd exps
 ./run_lineage_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_letus/lineage_benchamrk_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_letus/lineage_benchamrk_{timestamp}_summary.csv`.
 
-## Version pruning
-You can start the evaluation using the following commands.
+### Version pruning
+The following commands start the evaluation:
 ```bash
 cd exps
 ./run_update_benchmark.sh 
 ```
-This will run experiments, and summarize the results in `${respository_root}/results/results_letus/update_benchmark_{timestamp}_summary.csv`.
-`{timestamp}` is the timestamp of when the experiments started.
+The results will be stored in `${respository_root}/results/results_letus/update_benchmark_{timestamp}_summary.csv`.

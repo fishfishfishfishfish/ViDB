@@ -12,7 +12,7 @@ value_sizes=(1024)
 key_size=64
 num_transaction_account=20
 num_transaction_version=40
-query_versions="1|1,2|1,4|1,10|1,20|1,40|1"
+query_versions="10|1,20|1,40|1"
 
 
 data_path="${datadir}/data/"

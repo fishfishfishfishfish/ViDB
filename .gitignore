@@ -11,3 +11,9 @@ logs/*
 
 
 *.dat
+
+hyperbench
+hyerchain.so
+src/ViDB/hyperbench3
+run_chain_simple.sh
+run_chain_evm.sh

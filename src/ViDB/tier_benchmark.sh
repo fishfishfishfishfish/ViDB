@@ -5,7 +5,7 @@ test_name=${2:-test}
 echo "db_name: $db_name, test_name=$test_name"
 
 # define experiment parameters
-operationCounts=("1M")
+operationCounts=("1M" "10M")
 cr_values=(0.2 0.5 0.8)
 
 # directory
