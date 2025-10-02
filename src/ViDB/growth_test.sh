@@ -6,24 +6,22 @@ echo "db_name: $db_name, test_name=$test_name"
 
 # define experiment parameters
 # small test
-# operationCounts=("1M") # Human-readable operation counts, n1
-# zipfFactors=(0.99) # p1, zipf分布的参数
-# # batchSizes=(500 1000 2000 3000 4000 5000) # n3, 查询的key的数量
-# # valueSizes=(256 512 1024 2048)          
-# batchSizes=(5000) # n3, 查询的key的数量
-# valueSizes=(128)          
-# keySize=32
-# loadRound=10
-# batchCount=20
-
-# large test
-operationCounts=("1G") # Human-readable operation counts, n1
-batchSizes=(5000) # n3, 查询的key的数量
+operationCounts=("1M") # Human-readable operation counts, n1
 zipfFactors=(0.99) # p1, zipf分布的参数
-valueSizes=(1024)      
+batchSizes=(5000) # n3, 查询的key的数量
+valueSizes=(128)          
 keySize=32
 loadRound=10
-batchCount=0
+batchCount=20
+
+# large test
+# operationCounts=("1G") # Human-readable operation counts, n1
+# batchSizes=(5000) # n3, 查询的key的数量
+# zipfFactors=(0.99) # p1, zipf分布的参数
+# valueSizes=(1024)      
+# keySize=32
+# loadRound=10
+# batchCount=0
 
 # directory
 dataPath="${datadir}"
@@ -82,7 +80,7 @@ for human_op in "${operationCounts[@]}"; do
                 mkdir -p ${dataPath}
                 rm -rf ${dataPath}/*
                 Log="${outputDir}/growth_${human_op}_${batchSize}_${valueSize}_${timestamp}.log"
-                Cmd="${builddir}/letus-vidb-linux-amd64 growth --operationCount=$operationCount --loadRound=$loadRound --zipf=$zipf --batchSize=$batchSize --batchCount=$batchCount --valueSize=$valueSize --keySize=$keySize --dataPath=$dataPath" 
+                Cmd="${builddir}/build_release_${db_name}/vidb growth --operationCount=$operationCount --loadRound=$loadRound --zipf=$zipf --batchSize=$batchSize --batchCount=$batchCount --valueSize=$valueSize --keySize=$keySize --dataPath=$dataPath" 
                 run_benchmark "$Cmd" "$Log" "growth test (ops=${human_op}, batch=${batchSize}, zipfian=${zipf})"
                 sleep 5
             done

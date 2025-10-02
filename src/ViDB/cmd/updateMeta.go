@@ -4,13 +4,14 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"bytes"
+	// "bytes"
+	// "os/exec"
 	"fmt"
+	"regexp"
 	vidbconfig "github.com/bcds/go-hpc-vidb/config"
 	"github.com/duke-git/lancet/v2/random"
 	"gitlab.bcds.org.cn/sunyang/letus-vidb/vidbsvc"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"time"
 
@@ -25,6 +26,14 @@ var updateMetaCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		executeUpdateMeta(cmd, args)
 	},
+}
+
+func getFileSize(filename string)(int64,error){
+	fi, err := os.Stat(filename)
+	if err != nil{
+		return 0,err
+	}
+	return fi.Size(), nil
 }
 
 func init() {
@@ -59,21 +68,37 @@ func executeUpdateMeta(cmd *cobra.Command, args []string) {
 		_ = batch.Write(uint64(meta - 1))
 		since := time.Since(now).Milliseconds() // ms
 
-		// 这里需要调用 磁盘的查看
-		// 这里需要调用 磁盘的查看
-		cmd := exec.Command("bash", "-c", fmt.Sprintf("du -sh %s", filepath.Join(path, "index")))
-		output, err := cmd.Output()
+
+		files, err := os.ReadDir(path) 
 		if err != nil {
-			fmt.Printf("执行命令出错: %v\n", err)
+			fmt.Printf("error reading directory:%s", err)
 			continue
 		}
-		cmd = exec.Command("bash", "-c", fmt.Sprintf("du -sh %s", path))
-		output2, err := cmd.Output()
-		if err != nil {
-			fmt.Printf("执行命令出错: %v\n", err)
-			continue
+		partition_cnt := 0
+		regex := regexp.MustCompile(`partition-\d+`)
+		for _, file := range files {
+			if file.IsDir() && regex.MatchString(file.Name()) {
+				partition_cnt += 1
+			}
 		}
-		fmt.Printf("当前版本号: %d \tLan: %d(ms)\t当前Index目录大小: %s\t当前Index目录大小: %s\n", meta, since, bytes.TrimSpace(output), bytes.TrimSpace(output2))
+
+		var index_size = int64(0)
+		for i := 0; i < partition_cnt; i++ {
+			size, err := getFileSize(filepath.Join(path, fmt.Sprintf("partition-%d/index", i)))
+			if err != nil {
+				fmt.Printf("error get file size: %v\n", err)
+				continue
+			}
+			index_size += size
+		}
+
+		// cmd = exec.Command("bash", "-c", fmt.Sprintf("du -sh %s", path))
+		// output2, err := cmd.Output()
+		// if err != nil {
+		// 	fmt.Printf("执行命令出错: %v\n", err)
+		// 	continue
+		// }
+		fmt.Printf("Version: %d, time: %d, Index size: %d\n", meta, since, index_size)
 		// time.Sleep(5 * time.Second)
 	}
 }

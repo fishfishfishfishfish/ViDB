@@ -46,7 +46,7 @@ func executeRollback(cmd *cobra.Command, args []string) {
 
 	dbs := make([]*vidb.DB, len(configs))
 	for idx, config := range configs {
-		db, err := vidbsvc.GetVIDBInstance(config)
+		db, err := vidbsvc.GetVIDBInstance4Rollback(config)
 		if err != nil {
 			panic(err)
 		}
@@ -83,6 +83,6 @@ func executeRollback(cmd *cobra.Command, args []string) {
 		if afterRevertSeq+1 != targetSeq {
 			panic("afterRevertSeq != targetMeta")
 		}
-		fmt.Println(fmt.Sprintf("RollBack的版本数量: %d Lan: %d (us)", rollback, duration.Microseconds()))
+		fmt.Println(fmt.Sprintf("RollBack versions: %d Latancy: %d (us)", rollback, duration.Microseconds()))
 	}
 }

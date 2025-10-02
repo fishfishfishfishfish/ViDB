@@ -54,6 +54,14 @@ func GetVIDBInstance(configInterface vidbinterface.VidbConfigInterface) (*vidb.D
 	return db, nil
 }
 
+func GetVIDBInstance4Rollback(configInterface vidbinterface.VidbConfigInterface) (*vidb.DB, error) {
+	db, err := vidb.Open(configInterface, Logger{}, nil)
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
+}
+
 func MicroWrite(db *vidb.DB, operationCount, batchSize int, keySize int, valueSize int) (time.Duration, error) {
 	txCount := operationCount / batchSize // 获取到当前写入的总的 批次
 
