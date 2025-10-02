@@ -6,15 +6,13 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	vidbconfig "github.com/bcds/go-hpc-vidb/config"
+	"github.com/duke-git/lancet/v2/random"
+	"gitlab.bcds.org.cn/sunyang/letus-vidb/vidbsvc"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strconv"
 	"time"
-
-	vidbconfig "github.com/bcds/go-hpc-vidb"
-	"github.com/duke-git/lancet/v2/random"
-	"gitlab.bcds.org.cn/sunyang/letus-vidb/vidbsvc"
 
 	"github.com/spf13/cobra"
 )
@@ -27,15 +25,13 @@ var updateMetaCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		executeUpdateMeta(cmd, args)
 	},
-	
 }
-var metas []int
 
 func init() {
 	rootCmd.AddCommand(updateMetaCmd)
-	updateMetaCmd.Flags().StringVar(&dataPath, "dataPath", filepath.Join("testdata", "letus"), "data path")
-	updateMetaCmd.Flags().IntSliceVar(&metas, "metas", []int{1, 2, 3, 4, 5, 6, 7, 8, 9}, "versions")
-	updateMetaCmd.Flags().IntVar(&batchSize, "batchSize", 500, "records updated in one version")
+	updateMetaCmd.Flags().StringVar(&dataPath, "dataPath", filepath.Join("testdata", "letus"), "存储路径")
+	updateMetaCmd.Flags().IntSliceVar(&metas, "metas", []int{1, 2, 3, 4, 5, 6, 7, 8, 9}, "版本范围")
+	updateMetaCmd.Flags().IntVar(&batchSize, "batchSize", 500, "版本范围")
 }
 
 func executeUpdateMeta(cmd *cobra.Command, args []string) {
@@ -51,40 +47,33 @@ func executeUpdateMeta(cmd *cobra.Command, args []string) {
 	}
 	value := random.RandBytes(1024)
 
+	// 写入需要从 0 开始
+	randString := random.RandString(31)
 	for _, meta := range metas {
 		batch, _ := ins.NewBatchWithEngine()
 		now := time.Now()
 		for i := 0; i < batchSize; i++ {
-			_ = batch.Put([]byte(fmt.Sprintf("-account%0"+strconv.Itoa(keySize)+"d", i)), value)
+			_ = batch.Put([]byte("-account"+randString+fmt.Sprintf("%d", i)), value)
 		}
-		if err := batch.Hash(uint64(meta - 1)); err != nil {
-			fmt.Printf("%d meta, Hash error: %v\n", meta, err)
-			continue
-		}
-		if err := batch.Write(uint64(meta - 1)); err != nil {
-			fmt.Printf("%d meta, Write error: %v\n", meta, err)
-			continue
-		}
-		since := time.Since(now).Nanoseconds() // nanoseconds
+		_ = batch.Hash(uint64(meta - 1))
+		_ = batch.Write(uint64(meta - 1))
+		since := time.Since(now).Milliseconds() // ms
 
-		cmd := exec.Command("bash", "-c", fmt.Sprintf("du -sk %s", filepath.Join(path, "index")))
+		// 这里需要调用 磁盘的查看
+		// 这里需要调用 磁盘的查看
+		cmd := exec.Command("bash", "-c", fmt.Sprintf("du -sh %s", filepath.Join(path, "index")))
 		output, err := cmd.Output()
 		if err != nil {
-			fmt.Printf("command fail:: %v\n", err)
+			fmt.Printf("执行命令出错: %v\n", err)
 			continue
 		}
-		cmd = exec.Command("bash", "-c", fmt.Sprintf("du -sk %s", filepath.Join(path, "data")))
-		output1, err := cmd.Output()
-		if err != nil {
-			fmt.Printf("command fail:: %v\n", err)
-			continue
-		}
-		cmd = exec.Command("bash", "-c", fmt.Sprintf("du -sk %s", path))
+		cmd = exec.Command("bash", "-c", fmt.Sprintf("du -sh %s", path))
 		output2, err := cmd.Output()
 		if err != nil {
-			fmt.Printf("command fail: %v\n", err)
+			fmt.Printf("执行命令出错: %v\n", err)
 			continue
 		}
-		fmt.Printf("Version:[%d],Latency:[%d](ns),Index size:[%s],Data size:[%s],Total size:[%s]\n", meta, since, bytes.TrimSpace(output), bytes.TrimSpace(output1), bytes.TrimSpace(output2))
+		fmt.Printf("当前版本号: %d \tLan: %d(ms)\t当前Index目录大小: %s\t当前Index目录大小: %s\n", meta, since, bytes.TrimSpace(output), bytes.TrimSpace(output2))
+		// time.Sleep(5 * time.Second)
 	}
 }

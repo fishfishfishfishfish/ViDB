@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/bcds/go-hpc-vidb/common"
 	"os"
 	"path/filepath"
+	"time"
 
-	"github.com/bcds/go-hpc-vidb/common"
-
-	vidbconfig "github.com/bcds/go-hpc-vidb"
+	vidbconfig "github.com/bcds/go-hpc-vidb/config"
 	"github.com/spf13/cobra"
 	"gitlab.bcds.org.cn/sunyang/letus-vidb/vidbsvc"
 )
@@ -23,13 +23,13 @@ var rangeQueryCmd = &cobra.Command{
 }
 
 var recover bool
-var cacheCost uint64
 var VlogSize int
 var operationCount int
 var batchSize int
+var metaNum int
 var batchCount int
 var keySize int
-var valueSize uint32
+var valueSize int
 var dataPath string
 var rs []int
 
@@ -41,7 +41,7 @@ func init() {
 	rangeQueryCmd.Flags().IntVar(&operationCount, "operationCount", 10*vidbsvc.M, "操作次数")
 	rangeQueryCmd.Flags().IntVar(&batchSize, "batchSize", 500, "数据写入的批次大小")
 	rangeQueryCmd.Flags().IntVar(&batchCount, "BatchCount", 20, "批次数量")
-	rangeQueryCmd.Flags().Uint32Var(&valueSize, "valueSize", 1024, "值的大小")
+	rangeQueryCmd.Flags().IntVar(&valueSize, "valueSize", 1024, "值的大小")
 	rangeQueryCmd.Flags().IntVar(&keySize, "keySize", 32, "键的大小")
 	rangeQueryCmd.Flags().StringVar(&dataPath, "dataPath", filepath.Join("testdata", "letus"), "存储路径")
 	rangeQueryCmd.Flags().IntSliceVar(&rs, "rs", []int{5, 50, 100, 200, 300, 400, 500, 1000, 2000}, "范围查询的范围列表，多个值用逗号分隔，例如 5,50,100")
@@ -51,7 +51,6 @@ func executeRangeQuery(cmd *cobra.Command, args []string) {
 	config := vidbconfig.GetDefaultConfig()
 	config.DataPath = dataPath
 	config.MaxCost = cacheCost
-	config.VSize = valueSize
 	config.VlogSize = uint64(VlogSize) * common.GiB
 
 	if err := os.RemoveAll(config.DataPath); err != nil {
@@ -86,7 +85,7 @@ func executeRangeQuery(cmd *cobra.Command, args []string) {
 			}
 			throughput := float64(r) / duration.Seconds() // TPS 计算 总条目数 / 总时间
 			fmt.Printf("Latency: %d ns (%.6f s), range size: %d, TPS: %.2f\n", duration.Nanoseconds(), duration.Seconds(), r, throughput)
-			// time.Sleep(time.Second)
+			time.Sleep(time.Second)
 		}
 	}
 	_ = instance.Close()

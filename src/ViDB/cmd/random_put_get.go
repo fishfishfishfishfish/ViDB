@@ -11,7 +11,6 @@ import (
 	// "runtime"
 	"time"
 
-	vidbconfig "github.com/bcds/go-hpc-vidb"
 	"github.com/bcds/go-hpc-vidb/common"
 	"github.com/spf13/cobra"
 	"gitlab.bcds.org.cn/sunyang/letus-vidb/vidbsvc"
@@ -35,16 +34,19 @@ func init() {
 	randompgtCmd.Flags().IntVar(&batchCount, "BatchCount", 20, "批次数量")
 	randompgtCmd.Flags().IntVar(&batchSize, "batchSize", 500, "批次大小")
 	randompgtCmd.Flags().IntVar(&keySize, "keySize", 32, "键的大小")
-	randompgtCmd.Flags().Uint32Var(&valueSize, "valueSize", 1024, "值的大小")
+	randompgtCmd.Flags().IntVar(&valueSize, "valueSize", 1024, "值的大小")
 	randompgtCmd.Flags().StringVar(&dataPath, "dataPath", filepath.Join("testdata", "letus"), "存储路径")
 }
 
 func executeRandomPGt(cmd *cobra.Command, args []string) {
-	config := vidbconfig.GetDefaultConfig()
+	// config := vidbconfig.GetDefaultConfig()
+	loadBatchSize := 5000
+	perTreeMetaNum := (operationCount) / loadBatchSize // 1 trees
+	config := prepareConfig(uint64(perTreeMetaNum), uint64(loadBatchSize))
 	config.DataPath = dataPath
 	config.MaxCost = cacheCost
-	config.VSize = valueSize
 	config.VlogSize = uint64(VlogSize) * common.GiB
+	config.VSize = uint32(valueSize)
 	if err := os.RemoveAll(config.DataPath); err != nil {
 		panic(err)
 	}
@@ -58,14 +60,14 @@ func executeRandomPGt(cmd *cobra.Command, args []string) {
 		panic(err)
 	}
 
-	duration, err := vidbsvc.MicroWrite(instance, operationCount, batchSize, keySize, valueSize)
+	duration, err := vidbsvc.MicroWrite(instance, operationCount, loadBatchSize, keySize, valueSize)
 	fmt.Println(fmt.Sprintf("Execute Write %d done. Lantency: %d ms", operationCount, duration.Milliseconds()))
 	if err != nil {
 		panic(err)
 	}
 
 	// warm up
-	_, err = vidbsvc.RandomRead(instance, operationCount, 5000, keySize, valueSize)
+	_, err = vidbsvc.RandomRead(instance, operationCount, loadBatchSize, keySize, valueSize)
 	if err != nil {
 		panic(err)
 	}
@@ -76,7 +78,7 @@ func executeRandomPGt(cmd *cobra.Command, args []string) {
 
 	for i := 0; i < batchCount; i++ {
 		duration, err := vidbsvc.RandomRead(instance, operationCount, batchSize, keySize, valueSize)
-		fmt.Println(fmt.Sprintf("Execute Read %d done. Lantency: %d ns", batchSize, duration.Nanoseconds()))
+		fmt.Println(fmt.Sprintf("Execute Read %d done. Lantency: %d ns, qps: %.2f", batchSize, duration.Nanoseconds(), float64(batchSize)/float64(duration.Nanoseconds())*1e9))
 		if err != nil {
 			panic(err)
 		}
@@ -86,7 +88,7 @@ func executeRandomPGt(cmd *cobra.Command, args []string) {
 
 	for i := 0; i < batchCount; i++ {
 		duration, err := vidbsvc.RandomWrite(instance, operationCount, batchSize, keySize, valueSize)
-		fmt.Println(fmt.Sprintf("Execute Write %d done. Lantency: %d ns", batchSize, duration.Nanoseconds()))
+		fmt.Println(fmt.Sprintf("Execute Write %d done. Lantency: %d ns, tps: %.2f", batchSize, duration.Nanoseconds(), float64(batchSize)/float64(duration.Nanoseconds())*1e9))
 		if err != nil {
 			panic(err)
 		}
