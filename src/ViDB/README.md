@@ -35,26 +35,53 @@ The following commands start the evaluation:
 ```
 The results will be stored in `${respository_root}/results/results_vidb/lineage_benchamrk_{timestamp}_summary.csv`.
 
-## Version pruning
+# write operation test
 The following commands start the evaluation:
 ```bash
-./run_update_benchmark.sh 
+./dml_test.sh 
 ```
-The results will be stored in `${respository_root}/results/results_qmdb/update_benchmark_{timestamp}/updataMeta_{#rec}_{timestamp}.log`.
-Each `.log` file is created for a specific number of data records (`{#rec}`), containing update latency, index disk usage, total disk usage for each version.
+The results will be stored in `${respository_root}/results/results_vidb/dml_test_test/`.
 
-## Version rollback
+# query under different write operations
 The following commands start the evaluation:
 ```bash
-./run_rollback_benchmark.sh 
+./dmlmix_test.sh 
 ```
-The results will be stored in `${respository_root}/results/results_qmdb/rollback_benchmark_{timestamp}/rollback_{#rec}_{timestamp}.log`.
-Each `.log` file is created for a specific number of data records (`{#rec}`), containing rollback latency each number of rollback version.
+The results will be stored in `${respository_root}/results/results_vidb/dmlmix_test_test/`.
 
-## Storage tiering
+# performance for skewed access pattern
 The following commands start the evaluation:
 ```bash
-./run_tier_benchmark.sh
+./zipf_test.sh 
 ```
-The results will be stored in `${respository_root}/results/results_vidb/tier_benchamrk_{timestamp}/coldHot_{#rec}_{cold_ratio}_summary.csv`.
-Each `.log` file is created for a specific number of data records (`{#rec}`) and the ratio of cold data (`{cold_ratio}`), containing query latency under the corresponiding condition.
+The results will be stored in `${respository_root}/results/results_vidb/zipf_test_test/`.
+
+# performance for scaling data volume
+The following commands start the evaluation:
+```bash
+./grow_test.sh 
+```
+The results will be stored in `${respository_root}/results/results_vidb/grow_test_test/`.
+
+# performance under various capacity
+The following commands start the evaluation:
+```bash
+./multi_tree_test.sh 
+```
+The results will be stored in `${respository_root}/results/results_vidb/multitree_test_test`.
+
+
+# latency breakdown for point query
+```bash
+./point_breakdown.sh
+```
+The results will be stored in `${respository_root}/results/results_vidb/point_brk_test_test/`.
+
+
+# latency breakdown for range query
+```bash
+./range_breakdown.sh
+```
+The results will be stored in `${respository_root}/results/results_vidb/range_brk_test_test/`.
+
+

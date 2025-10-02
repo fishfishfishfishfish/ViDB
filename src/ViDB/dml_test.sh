@@ -5,23 +5,21 @@ test_name=${2:-test}
 echo "db_name: $db_name, test_name=$test_name"
 
 # define experiment parameters
-operationCounts=("1M" "10M") # Human-readable operation counts
-valueSizes=(1024)
-batchSizes=(25000)             
-meta_values="10,20,40"
+# small test
+operationCounts=("1M") # Human-readable operation counts, n1
+batchSizes=(500 1000 2000 3000 4000 5000) # n3, 查询的key的数量
+valueSizes=(128)          
 keySize=32
-
 
 # directory
 dataPath="${datadir}"
-outputDir="${resdir}/results_${db_name}/lineage_benchmark_${test_name}"
+outputDir="${resdir}/results_${db_name}/dml_test_${test_name}"
 mkdir -p ${dataPath}
 mkdir -p ${outputDir}
 rm -rf ${dataPath}/*
 rm -rf ${outputDir}/*
-
-# unique testname
-timestamp=${test_name}
+# Timestamp for unique filenames
+timestamp=$(test_name)
 
 # Start time for total execution
 total_start_time=$(date +%s)
@@ -66,9 +64,12 @@ for human_op in "${operationCounts[@]}"; do
     operationCount=$(human_to_number "$human_op")
     for batchSize in "${batchSizes[@]}"; do
         for valueSize in "${valueSizes[@]}"; do
-            logFile="${outputDir}/dataLineage_${human_op}_${batchSize}_${timestamp}.log"
-            LineageCmd="${builddir}/build_release_${db_name}/vidb dataLineage --batchSize=$batchSize --metas=$meta_values --dataPath=$dataPath --operationCount=$operationCount --valueSize=$valueSize"
-            run_benchmark "$LineageCmd" "$logFile" "dataLineage benchmark (ops=${human_op}, batch=${batchSize})"            sleep 5
+                mkdir -p ${dataPath}
+                rm -rf ${dataPath}/*
+                Log="${outputDir}/dml_${human_op}_${batchSize}_${valueSize}_${timestamp}.log"
+                Cmd="${builddir}/build_release_${db_name}/vidb randomUpdateInsertDelete --n_1=$operationCount --n_2=$batchSize --value_size=$valueSize --key_size=$keySize --dataPath=$dataPath" 
+                run_benchmark "$Cmd" "$Log" "dml test (ops=${human_op}, batch=${batchSize})"
+                sleep 5
         done 
     done
 done

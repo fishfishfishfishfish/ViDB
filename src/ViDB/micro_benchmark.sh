@@ -4,24 +4,22 @@ db_name=${1:-vidb}
 test_name=${2:-test}
 echo "db_name: $db_name, test_name=$test_name"
 
-# define experiment parameters
-operationCounts=("1M" "10M") # Human-readable operation counts
-valueSizes=(1024)
-batchSizes=(25000)             
-meta_values="10,20,40"
+# Human-readable operation counts
+operationCounts=("1M")  # Much clearer than 1000000, 10000000
+batchSizes=(500 1000 2000 3000 4000 5000)
+valueSizes=(256 512 1024 2048)         
 keySize=32
-
 
 # directory
 dataPath="${datadir}"
-outputDir="${resdir}/results_${db_name}/lineage_benchmark_${test_name}"
+outputDir="${resdir}/results_${db_name}/micro_benchmark_${test_name}"
 mkdir -p ${dataPath}
 mkdir -p ${outputDir}
 rm -rf ${dataPath}/*
 rm -rf ${outputDir}/*
 
-# unique testname
-timestamp=${test_name}
+# Timestamp for unique filenames
+timestamp=$(date +"%Y%m%d_%H%M%S")
 
 # Start time for total execution
 total_start_time=$(date +%s)
@@ -66,9 +64,10 @@ for human_op in "${operationCounts[@]}"; do
     operationCount=$(human_to_number "$human_op")
     for batchSize in "${batchSizes[@]}"; do
         for valueSize in "${valueSizes[@]}"; do
-            logFile="${outputDir}/dataLineage_${human_op}_${batchSize}_${timestamp}.log"
-            LineageCmd="${builddir}/build_release_${db_name}/vidb dataLineage --batchSize=$batchSize --metas=$meta_values --dataPath=$dataPath --operationCount=$operationCount --valueSize=$valueSize"
-            run_benchmark "$LineageCmd" "$logFile" "dataLineage benchmark (ops=${human_op}, batch=${batchSize})"            sleep 5
+            RandomPGtLog="${outputDir}/micro_${human_op}_${batchSize}_${valueSize}_${timestamp}.log"
+            RandomPGtCmd="${builddir}/build_release_${db_name}/vidb randompgt --VlogSize=4 --dataPath=$dataPath --batchSize=$batchSize --operationCount=$operationCount --valueSize=$valueSize --keySize=$keySize"
+            run_benchmark "$RandomPGtCmd" "$RandomPGtLog" "random-put-get benchmark (ops=${human_op}, batch=${batchSize})"
+            sleep 5
         done 
     done
 done
