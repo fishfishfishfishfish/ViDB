@@ -53,10 +53,5 @@ Benchmark scripts are provided for each database. To execute a benchmark:
 ```
 Results will be saved in: `results/result_vidb/{benchmark_name}`.
 
-🌟**Note:** Each ledger database may require slightly different commands.
-For details, the users can refer to the docs of each ledger databases.
-- ViDB: please see [ViDB docs](src/ViDB/README.md).
-- LedgerDB, SQL Ledger, and QLDB: please see [LDB docs](src/LDB/README.md).
-- QMDB: please see [QMDB docs](src/QMDB/README.md).
-- LETUS: please see [LETUS docs](src/LETUS/README.md).
+For details, the users can refer to the docs [ViDB docs](src/ViDB/README.md).
 

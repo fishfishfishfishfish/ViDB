@@ -35,6 +35,18 @@ The following commands start the evaluation:
 ```
 The results will be stored in `${respository_root}/results/results_vidb/lineage_benchamrk_{timestamp}_summary.csv`.
 
+# version pruning 
+```bash
+./update_benchmark.sh
+```
+The results will be stored in `${respository_root}/results/results_vidb/update_benchamrk_test/`.
+
+# version rollback
+```bash
+./rollback_benchmark.sh
+```
+The results will be stored in `${respository_root}/results/results_vidb/rollback_benchamrk_test/`.
+
 # write operation test
 The following commands start the evaluation:
 ```bash
