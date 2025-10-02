@@ -15,6 +15,7 @@ import (
 	commonprom "github.com/bcds/go-hpc-common/metrics/prometheus"
 	vidb "github.com/bcds/go-hpc-vidb/database"
 	vidbinterface "github.com/bcds/go-hpc-vidb/interfaces"
+	// mathrand "math/rand/v2"
 	"golang.org/x/exp/rand"
 )
 
@@ -167,7 +168,8 @@ func MicroRangeQuery(db *vidb.DB, operationCount, batchSize int, keySize int, r 
 	// seq := rand.Intn(txCount)
 	// seq := 0
 	// pos := 0
-	num := rand.Intn(operationCount - r)
+	// num := rand.Intn(operationCount - r)
+	num := 0
 	start := fmt.Sprintf("-account%0"+strconv.Itoa(keySize)+"d", num)
 	end := fmt.Sprintf("-account%0"+strconv.Itoa(keySize)+"d", num+r)
 
@@ -184,20 +186,20 @@ func MicroRangeQuery(db *vidb.DB, operationCount, batchSize int, keySize int, r 
 
 	// fmt.Println("Start= ", start, "End= ", end)
 	// now := time.Now()
-	iterator := db.NewIterator([]byte(start), []byte(end))
-	defer iterator.Release()
-	iteratorStartTime := time.Now()
-	for iterator.Next() {
-		// 这里可以输出当前 迭代器的数据，这里不需要这个值
-		// key := iterator.Key().([]byte)
-		// fmt.Println(fmt.Sprintf("key: %v", string(key)))
-	}
-
-	duration := time.Since(iteratorStartTime) // 构建迭代器到迭代器迭代完成的总时间
+	// iterator := db.NewIterator([]byte(start), []byte(end))
+	// defer iterator.Release()
+	// iteratorStartTime := time.Now()
+	// for iterator.Next() {
+	// 	// 这里可以输出当前 迭代器的数据，这里不需要这个值
+	// 	// key := iterator.Key().([]byte)
+	// 	// fmt.Println(fmt.Sprintf("key: %v", string(key)))
+	// }
+	// duration := time.Since(iteratorStartTime) // 构建迭代器到迭代器迭代完成的总时间
+	duration, err := ReadIteratorKey(db, []byte(start), []byte(end))
 
 	// fmt.Printf("总耗时: %d 迭代耗时为: %d us , 查询区间数目为: %d TPS: %.2f\n", time.Since(now).Nanoseconds(), duration.Nanoseconds(), r, throughput)
 	// fmt.Printf("总耗时: %.6f 迭代耗时为: %.6f s , 查询区间数目为: %d TPS: %.2f\n", time.Since(now).Seconds(), duration.Seconds(), r, throughput)
-	return duration, nil
+	return duration, err
 }
 
 func MicroRead(db *vidb.DB, operationCount, batchSize int) (time.Duration, error) {

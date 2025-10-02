@@ -33,7 +33,7 @@ The following commands start the evaluation:
 ```bash
 ./run_lineage_benchmark.sh 
 ```
-The results will be stored in `${respository_root}/results/results_vidb/lineage_benchamrk_{timestamp}_summary.csv`.
+The results will be stored in `${respository_root}/results/results_vidb/lineage_benchamrk_{timestamp}/`.
 
 # version pruning 
 ```bash
