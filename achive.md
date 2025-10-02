@@ -9,9 +9,6 @@ This repository includes the implementations of ViDB, as presented in in the pap
 ├── logs/&emsp;&emsp;&emsp;&emsp;*Reserved directory for execution logs.*<br>
 ├── doc/&emsp;&emsp;&emsp;&emsp;&nbsp;*Includes the research paper.*<br>
 ├── src/<br>
-&emsp;&emsp;├── LDB/&emsp;&emsp;&emsp;&nbsp;*Source code of LedgerDB, SQL Ledger, and QLDB, forked from [LedgerDatabase](https://github.com/nusdbsystem/LedgerDatabase).*<br>
-&emsp;&emsp;├── QMDB/&emsp;&emsp;*Source code of QMDB, forked from [QMDB](https://github.com/LayerZero-Labs/qmdb).*<br>
-&emsp;&emsp;├── LETUS/&emsp;&emsp;&nbsp;*Source code of LETUS, re-implemented by the us.*<br>
 &emsp;&emsp;└── ViDB/&emsp;&emsp;&emsp;*Source code of ViDB, proposed in our paper.*<br>
 ├── CMakeLists.txt<br>
 ├── .gitignore<br>
@@ -45,16 +42,16 @@ Ensure the following packages are installed:
 To set up the experiments, we provide a build script for each ledger database. 
 For each ledger database, enter the `exps` folder, and run the following command to compile:
 ```bash
-cd src/{LDB,QMDB,LETUS,ViDB}/exps
+cd src/ViDB/exps
 ./build.sh
 ```
-The built database will be placed in `builds/build_release_{database}`.
+The built database will be placed in `builds/build_release_vidb`.
 
 Benchmark scripts are provided for each database. To execute a benchmark:
 ```
 ./run_{benchmark_name}_benchmark.sh
 ```
-Results will be saved in: `results/result_{database_name}/{benchmark_name}`.
+Results will be saved in: `results/result_vidb/{benchmark_name}`.
 
 🌟**Note:** Each ledger database may require slightly different commands.
 For details, the users can refer to the docs of each ledger databases.
